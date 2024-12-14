@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đồng hồ cờ chớp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .clock {
+      font-size: 2em;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Đồng hồ cờ chớp</h1>
+  <div>
+    <div id="clock1" class="clock">10:00</div>
+    <div id="clock2" class="clock">10:00</div>
+  </div>
+  <button id="switchTurn">Chuyển lượt</button>
+
+  <script>
+    // Thời gian ban đầu (10 phút)
+    const initialTime = 10 * 60;
+
+    // Khai báo biến cho đồng hồ
+    let time1 = initialTime;
+    let time2 = initialTime;
+    let activeClock = 1; // Đồng hồ đang chạy (1 hoặc 2)
+    let timer;
+
+    // Lấy phần tử DOM
+    const clock1 = document.getElementById("clock1");
+    const clock2 = document.getElementById("clock2");
+    const switchTurnButton = document.getElementById("switchTurn");
+
+    // Hàm định dạng thời gian
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Cập nhật giao diện đồng hồ
+    function updateClocks() {
+      clock1.textContent = formatTime(time1);
+      clock2.textContent = formatTime(time2);
+    }
+
+    // Hàm chạy đồng hồ
+    function runClock() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (activeClock === 1) {
+          time1--;
+          if (time1 <= 0) {
+            clearInterval(timer);
+            alert("Hết giờ! Đồng hồ 1 thua.");
+          }
+        } else {
+          time2--;
+          if (time2 <= 0) {
+            clearInterval(timer);
+            alert("Hết giờ! Đồng hồ 2 thua.");
+          }
+        }
+        updateClocks();
+      }, 1000);
+    }
+
+    // Sự kiện chuyển lượt
+    switchTurnButton.addEventListener("click", () => {
+      activeClock = activeClock === 1 ? 2 : 1;
+      runClock();
+    });
+
+    // Khởi tạo giao diện
+    updateClocks();
+    runClock();
+  </script>
+</body>
+</html>
